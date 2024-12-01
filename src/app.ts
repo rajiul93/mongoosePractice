@@ -2,6 +2,7 @@ import cors from 'cors';
 import express, { Application, Request, Response } from 'express';
 import { globalError } from './app/middlewares/globalError';
 import { notFoundRoute } from './app/middlewares/notFoundRout';
+import { AcademicRoutes } from './app/modules/academicSemester/academicSemester.routes';
 import { StudentRoutes } from './app/modules/students/student.route';
 import { UserRoutes } from './app/modules/users/users.route';
 const app: Application = express();
@@ -12,6 +13,7 @@ app.use(cors());
 // application routes
 app.use('/api/v1/students', StudentRoutes);
 app.use('/api/v1/users', UserRoutes);
+app.use('/api/v1/academic-semester', AcademicRoutes);
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Hello World!');
