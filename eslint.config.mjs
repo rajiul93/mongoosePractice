@@ -9,7 +9,7 @@ export default [
     languageOptions: {
       globals: {
         ...globals.browser,
-        process: 'readonly', 
+        process: 'readonly',
       },
     },
   },

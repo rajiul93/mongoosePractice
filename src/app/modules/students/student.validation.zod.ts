@@ -46,46 +46,45 @@ const localGuardianSchema = z.object({
 });
 
 // Student Schema
-const studentValidationSchemaByZod = z.object({
-  id: z.string().min(1, { message: 'ID is required' }),
-  name: userNameSchema,
-  gender: z
-    .enum(['male', 'female', 'other'], {
-      errorMap: (issue) => ({
-        message: `${issue.code} is not valid. You should select a valid gender.`,
-      }),
-    })
-    .refine((val) => !!val, { message: 'Gender is required' }),
-  email: z
-    .string()
-    .min(1, { message: 'Email is required' })
-    .refine((value) => ({
-      message: `${value} is not a valid email address`,
-    })),
-  contactNumber: z.string().min(1, { message: 'Contact number is required' }),
-  emergencyContactNo: z
-    .string()
-    .min(1, { message: 'Emergency contact number is required' }),
-  bloodGroup: z
-    .enum(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'])
-    .optional(),
-  presentAddress: z.string().min(1, { message: 'Present address is required' }),
-  permanentAddress: z
-    .string()
-    .min(1, { message: 'Permanent address is required' }),
-  guardian: guardianSchema,
-  localGuardian: localGuardianSchema,
-  profileImg: z
-    .string()
-    .url({ message: 'Profile image must be a valid URL' })
-    .optional(),
-  isActive: z
-    .enum(['active', 'inactive'], {
-      errorMap: (issue) => ({
-        message: `${issue}Status must be either active or inactive`,
-      }),
-    })
-    .default('active'),
+const studentValidationSchema = z.object({
+  body: z.object({
+    id: z.string().min(1, { message: 'ID is required' }),
+    name: userNameSchema,
+    gender: z
+      .enum(['male', 'female', 'other'], {
+        errorMap: (issue) => ({
+          message: `${issue.code} is not valid. You should select a valid gender.`,
+        }),
+      })
+      .refine((val) => !!val, { message: 'Gender is required' }),
+    email: z
+      .string()
+      .min(1, { message: 'Email is required' })
+      .refine((value) => ({
+        message: `${value} is not a valid email address`,
+      })),
+    contactNo: z.string().min(1, { message: 'Contact number is required' }),
+    emergencyContactNo: z
+      .string()
+      .min(1, { message: 'Emergency contact number is required' }),
+    bloodGroup: z
+      .enum(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'])
+      .optional(),
+    presentAddress: z
+      .string()
+      .min(1, { message: 'Present address is required' }),
+    permanentAddress: z
+      .string()
+      .min(1, { message: 'Permanent address is required' }),
+    guardian: guardianSchema,
+    localGuardian: localGuardianSchema,
+    profileImg: z
+      .string()
+      .url({ message: 'Profile image must be a valid URL' })
+      .optional(),
+  }),
 });
 
-export default studentValidationSchemaByZod;
+export const studentValidationSchemaByZod = {
+  studentValidationSchema,
+};
