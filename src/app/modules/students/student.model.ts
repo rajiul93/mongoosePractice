@@ -9,7 +9,7 @@ import {
   TUserName,
 } from './student.interface';
 
-const userSchema = new Schema<TUserName>({
+const userNameSchema = new Schema<TUserName>({
   firstName: {
     type: String,
     required: [true, 'First name is required'],
@@ -52,53 +52,79 @@ const localGuardianSchema = new Schema<TLocalGuardian>({
 });
 
 const studentSchema = new Schema<TStudent, StudentModel, StudentMethods>({
-  id: { type: String, required: true, unique: true }, // Assuming it's a unique string identifier
+  id: {
+    type: String,
+    required: [true, 'ID is required'],
+    unique: true,
+  },
+  userID: {
+    type: Schema.Types.ObjectId,
+    required: [true, 'User id is required'],
+    unique: true,
+    ref: 'User',
+  },
   name: {
-    type: userSchema,
-    required: true,
+    type: userNameSchema,
+    required: [true, 'Name is required'],
   },
   gender: {
     type: String,
     enum: {
       values: ['male', 'female', 'other'],
-      message:
-        '{VALUE} is not valid data You should select your correct gender',
+      message: '{VALUE} is not a valid gender',
     },
-    required: true,
+    required: [true, 'Gender is required'],
   },
+  dateOfBirth: { type: String },
   email: {
     type: String,
-    required: true,
+    required: [true, 'Email is required'],
     unique: true,
-    validate: {
-      validator: (value: string) => validator.isEmail(value),
-      message: '{VALUE} is not a valid  email',
-    },
   },
-  contactNumber: { type: String, required: true },
-  emergencyContactNo: { type: String, required: true },
+  contactNo: { type: String, required: [true, 'Contact number is required'] },
+  emergencyContactNo: {
+    type: String,
+    required: [true, 'Emergency contact number is required'],
+  },
   bloodGroup: {
     type: String,
-    enum: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
-    required: false,
+    enum: {
+      values: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
+      message: '{VALUE} is not a valid blood group',
+    },
   },
-  presentAddress: { type: String, required: true },
-  permanentAddress: { type: String, required: true },
+  presentAddress: {
+    type: String,
+    required: [true, 'Present address is required'],
+  },
+  permanentAddress: {
+    type: String,
+    required: [true, 'Permanent address is required'],
+  },
   guardian: {
     type: guardianSchema,
-    required: true,
+    required: [true, 'Guardian information is required'],
   },
   localGuardian: {
     type: localGuardianSchema,
-    required: true,
+    required: [true, 'Local guardian information is required'],
   },
-  profileImg: { type: String, required: false }, // Optional profile image
-  isActive: {
-    type: String,
-    enum: ['active', 'inactive'],
-    required: true,
-    default: 'active',
+  profileImg: { type: String },
+  isDeleted: {
+    type: Boolean,
+    default: false,
   },
+},
+{
+  toJSON: {
+    virtuals: true,
+  },
+},
+);
+
+// virtual
+studentSchema.virtual('fullName').get(function () {
+return this.name.firstName + this.name.middleName + this.name.lastName;
 });
 
 studentSchema.methods.isUserExist = async function (id: string) {
