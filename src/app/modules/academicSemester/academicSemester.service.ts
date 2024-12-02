@@ -22,7 +22,11 @@ const updateAcademicSemesterDB = async (
   payload: TAcademicSemester,
   id: string,
 ) => {
-  if (academicSemesterNameCodeMapper[payload.name] !== payload.code) {
+  if (
+    payload.name &&
+    payload.code &&
+    academicSemesterNameCodeMapper[payload.name] !== payload.code
+  ) {
     throw new Error('Invalid semester code');
   }
   const previousSemesterData: TAcademicSemester | null =

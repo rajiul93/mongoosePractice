@@ -56,7 +56,7 @@ const studentSchema = new Schema<TStudent, StudentModel, StudentMethods>(
     id: {
       type: String,
       required: [true, 'ID is required'],
-      unique: true,
+      // unique: true,
     },
     userID: {
       type: Schema.Types.ObjectId,
@@ -101,6 +101,10 @@ const studentSchema = new Schema<TStudent, StudentModel, StudentMethods>(
     permanentAddress: {
       type: String,
       required: [true, 'Permanent address is required'],
+    },
+    admissionSemester: {
+      type: Schema.ObjectId,
+      ref:"AcademicSemester"
     },
     guardian: {
       type: guardianSchema,
