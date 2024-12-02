@@ -5,6 +5,18 @@ import { AcademicValidation } from './academicSemester.validation';
 
 const router = Router();
 
+router.get(
+  '/get-academic-semester',
+  AcademicController.getAllAcademicSemester,
+);
+router.get(
+  '/get-academic-semester/:id',
+  AcademicController.getSpecificAcademicSemester,
+);
+router.patch(
+  '/update-academic-semester/:id',
+  AcademicController.getSpecificAcademicSemester,
+);
 router.post(
   '/create-academic-semester',
   validateMiddleware(AcademicValidation.CreateAcademicSemesterSchema),
