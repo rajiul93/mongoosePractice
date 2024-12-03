@@ -7,7 +7,7 @@ const userSchema = new Schema<TUser>(
     id: {
       type: String,
       required: true,
-      unique:true,
+      unique: true,
     },
     password: {
       type: String,
@@ -46,6 +46,7 @@ userSchema.pre('save', async function (next) {
   );
   next();
 });
+
 userSchema.post('save', function (doc, next) {
   doc.password = '';
   next();
