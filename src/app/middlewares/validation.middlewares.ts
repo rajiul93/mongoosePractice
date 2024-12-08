@@ -3,7 +3,7 @@ import { AnyZodObject } from 'zod';
 
 export const validateMiddleware = (schema: AnyZodObject) => {
   return async (req: Request, res: Response, next: NextFunction) => { 
-    console.log("dddddddddddddd",req.body);
+
     try {
       await schema.parseAsync({
         body: req.body,

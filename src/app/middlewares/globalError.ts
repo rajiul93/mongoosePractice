@@ -1,19 +1,34 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable no-unused-vars */
-import { NextFunction, Request, Response } from 'express';
+/* eslint-disable @typescript-eslint/no-unused-vars */
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
-export const globalError = (
-  error: any,
-  req: Request,
-  res: Response, 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  next: NextFunction,
-) => {  
-  console.log(error);
-  res.status(500).json({
+import { ErrorRequestHandler } from 'express';
+import { ZodError } from 'zod';
+import config from '../config';
+import handleZodError from '../error/handleZodError';
+import { TErrorSource } from '../interface/errorInterface';
+
+// eslint-disable-next-line no-unused-vars
+export const globalError: ErrorRequestHandler = (error, req, res, nex) => {
+  let statusCode = error.statusCode || 500;
+  let message = error.message || 'Something went wrong';
+
+  let errorSource: TErrorSource = [
+    {
+      path: '',
+      message: 'Something went wrong',
+    },
+  ];
+
+  if (error instanceof ZodError) {
+    const simplifiedError = handleZodError(error);
+    statusCode = simplifiedError?.statusCode;
+    message = simplifiedError?.message;
+    errorSource = simplifiedError?.errorSources;
+  }
+
+  res.status(statusCode).json({
     success: false,
-    message: 'Internal server error some thing wrong',
-    error: error instanceof Error ? error.message : 'Unknown error',
+    message,
+    errorSource,
+    stack: config.Node_env === 'development' ? error?.stack : null,
   });
 };
