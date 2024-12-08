@@ -2,8 +2,8 @@ import { Router } from 'express';
 import { validateMiddleware } from '../../middlewares/validation.middlewares';
 import { academicDepartmentController } from './academicDepartment.controller';
 import {
-    CreateAcademicDepartmentValidation,
-    UpdateAcademicDepartmentValidation,
+  // CreateAcademicDepartmentValidation,
+  UpdateAcademicDepartmentValidation,
 } from './academicDepartment.validation';
 
 const router = Router();
@@ -17,7 +17,7 @@ router.get(
 
 router.post(
   '/',
-  validateMiddleware(CreateAcademicDepartmentValidation),
+  // validateMiddleware(CreateAcademicDepartmentValidation),
   academicDepartmentController.createAcademicDepartment,
 );
 
