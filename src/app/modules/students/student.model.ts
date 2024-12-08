@@ -102,9 +102,15 @@ const studentSchema = new Schema<TStudent, StudentModel, StudentMethods>(
       type: String,
       required: [true, 'Permanent address is required'],
     },
-    admissionSemester: {
-      type: Schema.ObjectId,
-      ref:"AcademicSemester"
+    academicSemester: {
+      type: Schema.Types.ObjectId,
+      ref: 'AcademicSemester',
+      required: true,
+    },
+    academicDepartment: {
+      type: Schema.Types.ObjectId, 
+      ref: 'AcademicDepartment',
+      required: true,
     },
     guardian: {
       type: guardianSchema,
@@ -133,7 +139,7 @@ studentSchema.virtual('fullName').get(function () {
 });
 
 studentSchema.methods.isUserExist = async function (id: string) {
-  const existingUser = await Student.findOne({ id });
+  const existingUser = await Student.findOne({ id }); 
   return existingUser;
 };
 

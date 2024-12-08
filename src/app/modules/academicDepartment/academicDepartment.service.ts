@@ -7,11 +7,11 @@ const createAcademicDepartmentIntoDB = async (payload: TAcademicDepartment) => {
 };
 
 const getAllAcademicDepartmentIntoDB = async () => {
-  const result = await AcademicDepartment.find();
+  const result = await AcademicDepartment.find().populate("academicFaculty");
   return result;
 };
 const getSingleAcademicDepartmentIntoDB = async (id: string) => {
-  const result = await AcademicDepartment.findById({ _id: id });
+  const result = await AcademicDepartment.findOneAndUpdate({ _id: id });
   return result;
 };
 const updateSingleAcademicDepartmentIntoDB = async (

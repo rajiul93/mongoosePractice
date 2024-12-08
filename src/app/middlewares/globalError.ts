@@ -7,8 +7,10 @@ export const globalError = (
   error: any,
   req: Request,
   res: Response, 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   next: NextFunction,
 ) => {  
+  console.log(error);
   res.status(500).json({
     success: false,
     message: 'Internal server error some thing wrong',

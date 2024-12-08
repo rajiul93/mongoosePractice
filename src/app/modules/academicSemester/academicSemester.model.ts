@@ -1,4 +1,4 @@
-import { model, Schema } from 'mongoose';
+import mongoose, { model } from 'mongoose';
 import {
   CodeAcademicSemester,
   Months,
@@ -6,7 +6,7 @@ import {
 } from './academicSemester.constants';
 import { TAcademicSemester } from './academicSemester.interface';
 
-const academicSemesterSchema = new Schema<TAcademicSemester>({
+const academicSemesterSchema = new mongoose.Schema<TAcademicSemester>({
   name: {
     type: String,
     required: true,
@@ -45,7 +45,7 @@ academicSemesterSchema.pre('save', async function (next) {
 });
 
 const AcademicSemester = model<TAcademicSemester>(
-  'academicSemester',
+  'AcademicSemester',
   academicSemesterSchema,
 );
 
