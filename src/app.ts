@@ -19,7 +19,7 @@ app.use('/api/v1/academic-semester', AcademicRoutes);
 app.use('/api/v1/academic-faculty', academicFacultyRouters);
 app.use('/api/v1/academic-department', academicDepartmentRouters);
 
-app.get('/', (req: Request, res: Response) => {
+app.get('/', async (req: Request, res: Response) => {
   res.send('Hello World!');
 });
 
