@@ -26,8 +26,8 @@ process.on("unhandledRejection", ()=>{
   process.exit(1)
 })
 
-process.on("uncaughtException", ()=>{
-  console.log("uncaughtException");
-  process.exit(1)
-})
+// process.on("uncaughtException", ()=>{
+//   console.log("uncaughtException");
+//   process.exit(1)
+// })
  
