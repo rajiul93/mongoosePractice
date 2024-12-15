@@ -5,6 +5,8 @@ import { notFoundRoute } from './app/middlewares/notFoundRout';
 import { academicDepartmentRouters } from './app/modules/academicDepartment/academicDepartment.router';
 import { academicFacultyRouters } from './app/modules/academicFaculty/academicFaculty.router';
 import { AcademicRoutes } from './app/modules/academicSemester/academicSemester.routes';
+import { AdminRoutes } from './app/modules/admin/admin.route';
+import { FacultyRoutes } from './app/modules/faculty/faculty.route';
 import { StudentRoutes } from './app/modules/students/student.route';
 import { UserRoutes } from './app/modules/users/users.route';
 const app: Application = express();
@@ -18,6 +20,11 @@ app.use('/api/v1/users', UserRoutes);
 app.use('/api/v1/academic-semester', AcademicRoutes);
 app.use('/api/v1/academic-faculty', academicFacultyRouters);
 app.use('/api/v1/academic-department', academicDepartmentRouters);
+app.use('/api/v1/faculty', FacultyRoutes);
+
+
+
+app.use('/api/v1/admin', AdminRoutes);
 
 app.get('/', async (req: Request, res: Response) => {
   res.send('Hello World!');

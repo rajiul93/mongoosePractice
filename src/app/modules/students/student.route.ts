@@ -6,7 +6,7 @@ import { studentValidationSchemaByZod } from './student.validation.zod';
 const route = express.Router();
 
 route.get('/', StudentController.getAllStudents);
-route.get('/:email', StudentController.getSingleStudents);
+route.get('/:id', StudentController.getSingleStudents);
 route.delete('/:studentId', StudentController.deleteStudent);
 route.patch(
   '/:studentId',

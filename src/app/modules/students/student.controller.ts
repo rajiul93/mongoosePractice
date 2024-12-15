@@ -12,8 +12,8 @@ const getAllStudents = catchAsync(async (req, res) => {
 });
 
 const getSingleStudents = catchAsync(async (req, res) => {
-  const email: string = req.params.email;
-  const result = await StudentServices.getSingleStudentsDB(email);
+  const id: string = req.params.id; 
+  const result = await StudentServices.getSingleStudentsDB(id);
   res.status(200).send({
     success: true,
     message: ' get single student successfully',
