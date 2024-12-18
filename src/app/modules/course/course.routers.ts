@@ -20,6 +20,16 @@ router.patch(
   validateMiddleware(CourseValidation.updateCourseValidationSchema),
   courseController.updateCourse,
 );
+router.put(
+  '/:courseId/assign-faculties',
+  validateMiddleware(CourseValidation.CourseFacultiesSchema),
+  courseController.assignsCourseFaculties,
+);
+router.delete(
+  '/:courseId/remove-faculties',
+  validateMiddleware(CourseValidation.CourseFacultiesSchema),
+  courseController.removeFacultiesFormCourse,
+);
 
 router.delete(
   '/:id',
