@@ -8,6 +8,7 @@ import { AcademicRoutes } from './app/modules/academicSemester/academicSemester.
 import { AdminRoutes } from './app/modules/admin/admin.route';
 import { courseRouters } from './app/modules/course/course.routers';
 import { FacultyRoutes } from './app/modules/faculty/faculty.route';
+import { semesterRegistrationRouters } from './app/modules/semesterRegistration/semesterRegistration.route';
 import { StudentRoutes } from './app/modules/students/student.route';
 import { UserRoutes } from './app/modules/users/users.route';
 const app: Application = express();
@@ -23,6 +24,7 @@ app.use('/api/v1/academic-faculty', academicFacultyRouters);
 app.use('/api/v1/academic-department', academicDepartmentRouters);
 app.use('/api/v1/faculty', FacultyRoutes);
 app.use('/api/v1/course', courseRouters);
+app.use('/api/v1/semester-registration', semesterRegistrationRouters);
 
 
 
