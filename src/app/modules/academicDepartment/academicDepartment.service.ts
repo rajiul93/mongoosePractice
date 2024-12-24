@@ -11,7 +11,7 @@ const getAllAcademicDepartmentIntoDB = async () => {
   return result;
 };
 const getSingleAcademicDepartmentIntoDB = async (id: string) => {
-  const result = await AcademicDepartment.findOneAndUpdate({ _id: id });
+  const result = await AcademicDepartment.findById(id);
   return result;
 };
 const updateSingleAcademicDepartmentIntoDB = async (
