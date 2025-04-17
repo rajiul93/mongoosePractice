@@ -8,6 +8,7 @@ import { Student } from './student.model';
 const getAllStudentsDB = async (query: Record<string, unknown>) => {
   const studentQuery = new QueryBuilders(
     Student.find()
+      .populate('userID')
       .populate({
         path: 'academicDepartment',
         populate: {
@@ -27,7 +28,7 @@ const getAllStudentsDB = async (query: Record<string, unknown>) => {
   return result;
 };
 
-const getSingleStudentsDB = async (id: string) => { 
+const getSingleStudentsDB = async (id: string) => {
   const result = await Student.findOne({ id });
   return result;
 };

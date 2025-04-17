@@ -6,6 +6,7 @@ import { academicDepartmentRouters } from './app/modules/academicDepartment/acad
 import { academicFacultyRouters } from './app/modules/academicFaculty/academicFaculty.router';
 import { AcademicRoutes } from './app/modules/academicSemester/academicSemester.routes';
 import { AdminRoutes } from './app/modules/admin/admin.route';
+import { AuthRoute } from './app/modules/auth/auth.route';
 import { courseRouters } from './app/modules/course/course.routers';
 import { FacultyRoutes } from './app/modules/faculty/faculty.route';
 import { offeredCourseRouters } from './app/modules/offerCourse/offerCourse.routers';
@@ -27,6 +28,7 @@ app.use('/api/v1/faculty', FacultyRoutes);
 app.use('/api/v1/course', courseRouters);
 app.use('/api/v1/semester-registration', semesterRegistrationRouters);
 app.use('/api/v1/offer-course', offeredCourseRouters);
+app.use('/api/v1/auth', AuthRoute);
 
 
 
