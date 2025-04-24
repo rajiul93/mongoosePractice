@@ -22,4 +22,5 @@ export interface UserModel extends Model<TUser> {
     plainTextPassword: string,
     hashedPassword: string,
   ): Promise<boolean>;
+  isJWTIssuedBeforePasswordChange(passwordChangeTime: Date, jwtIssuedTimestamp: number): boolean
 }
