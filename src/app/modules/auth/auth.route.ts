@@ -6,6 +6,7 @@ import { authController } from './auth.controller';
 import {
   changePasswordValidationSchema,
   loginValidationSchema,
+  refreshTokenValidationSchema,
 } from './auth.validation';
 
 const router = express.Router();
@@ -21,5 +22,11 @@ router.post(
   validateMiddleware(changePasswordValidationSchema),
   authController.changePassword,
 );
+
+router.post(
+  "/refresh-token",
+  validateMiddleware(refreshTokenValidationSchema),
+  authController.refreshToken,
+)
 
 export const AuthRoute = router;

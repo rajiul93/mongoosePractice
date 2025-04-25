@@ -14,3 +14,11 @@ export const changePasswordValidationSchema = z.object({
     newPassword: z.string({ required_error: 'Password is required' }),
   }),
 });
+
+export const refreshTokenValidationSchema = z.object({
+  cookies:z.object({
+    refreshToken:z.string({
+      required_error:"refresh token is required"
+    })
+  })
+})

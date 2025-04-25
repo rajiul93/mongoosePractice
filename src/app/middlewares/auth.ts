@@ -5,7 +5,7 @@ import config from '../config';
 import AppError from '../error/AppError';
 import { TUserRole } from '../modules/users/users.interface';
 import { catchAsync } from '../utils/catchAsync';
-import { User } from '../modules/users/users.model'; 
+import { User } from '../modules/users/users.model';
 
 export const auth = (...requiredRoles: TUserRole[]) => {
   return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
@@ -15,14 +15,14 @@ export const auth = (...requiredRoles: TUserRole[]) => {
       throw new AppError(httpStatus.UNAUTHORIZED, 'your are not authorized!');
     }
 
-    // now check token is valid or not 
-    const decoded = Jwt.verify( // decoded
+    // now check token is valid or not
+    const decoded = Jwt.verify(
+      // decoded
       token,
       config.jwt_access_secret as string,
     ) as JwtPayload;
 
-    const { userRole, userId ,iat } = decoded;
-
+    const { userRole, userId, iat } = decoded;
 
     const isUserExists = await User.isUserExistsByCustomId(userId);
     if (!isUserExists) {
@@ -37,12 +37,15 @@ export const auth = (...requiredRoles: TUserRole[]) => {
       throw new AppError(httpStatus.FORBIDDEN, 'This user is blocked');
     }
 
- 
-    if (isUserExists.passwordUpdateDate && User.isJWTIssuedBeforePasswordChange(isUserExists.passwordUpdateDate , iat as number) ) {
+    if (
+      isUserExists.passwordUpdateDate &&
+      User.isJWTIssuedBeforePasswordChange(
+        isUserExists.passwordUpdateDate,
+        iat as number,
+      )
+    ) {
       throw new AppError(httpStatus.UNAUTHORIZED, 'your are not authorized 2!');
-
     }
-
 
     if (requiredRoles && !requiredRoles.includes(userRole)) {
       throw new AppError(httpStatus.UNAUTHORIZED, 'your are not authorized 3!');
@@ -50,6 +53,5 @@ export const auth = (...requiredRoles: TUserRole[]) => {
 
     req.user = decoded as JwtPayload;
     next();
- 
   });
 };

@@ -6,7 +6,7 @@ import AppError from '../../error/AppError';
 import { User } from '../users/users.model';
 import { TLoginUser } from './auth.interface';
 import { createToken } from './auth.utils';
-
+import Jwt from 'jsonwebtoken';
 const loginUser = async (payload: TLoginUser) => {
   const isUserExists = await User.isUserExistsByCustomId(payload.id);
   if (!isUserExists) {
@@ -43,7 +43,7 @@ const loginUser = async (payload: TLoginUser) => {
     config.jwt_refresh_secret as string,
     config.jwt_refresh_expire_in as string,
   );
- 
+
   return {
     accessToken,
     refreshToken,
@@ -97,8 +97,53 @@ const changePassword = async (
   );
   return null;
 };
+const refreshToken = async (token: string) => {
+  // now check token is valid or not
+  const decoded = Jwt.verify(
+    // decoded
+    token,
+    config.jwt_refresh_secret as string,
+  ) as JwtPayload;
 
+  const { userId, iat } = decoded;
+
+  const isUserExists = await User.isUserExistsByCustomId(userId);
+  if (!isUserExists) {
+    throw new AppError(httpStatus.NOT_FOUND, 'This user is not found');
+  }
+
+  if (isUserExists?.isDeleted) {
+    throw new AppError(httpStatus.FORBIDDEN, 'This user is deleted');
+  }
+
+  if (isUserExists?.status === 'blocked') {
+    throw new AppError(httpStatus.FORBIDDEN, 'This user is blocked');
+  }
+
+  if (
+    isUserExists.passwordUpdateDate &&
+    User.isJWTIssuedBeforePasswordChange(
+      isUserExists.passwordUpdateDate,
+      iat as number,
+    )
+  ) {
+    throw new AppError(httpStatus.UNAUTHORIZED, 'your are not authorized 2!');
+  }
+  const jwtPayload = {
+    userId: isUserExists.id,
+    userRole: isUserExists.role,
+  };
+  const accessToken = createToken(
+    jwtPayload,
+    config.jwt_access_secret as string,
+    config.jwt_access_expire_in as string,
+  );
+  return {
+    accessToken,
+  };
+};
 export const AuthService = {
   loginUser,
   changePassword,
+  refreshToken,
 };

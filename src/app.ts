@@ -13,11 +13,12 @@ import { offeredCourseRouters } from './app/modules/offerCourse/offerCourse.rout
 import { semesterRegistrationRouters } from './app/modules/semesterRegistration/semesterRegistration.route';
 import { StudentRoutes } from './app/modules/students/student.route';
 import { UserRoutes } from './app/modules/users/users.route';
+import cookieParser from 'cookie-parser';
 const app: Application = express();
 // parsers
 app.use(express.json());
-app.use(cors());
-
+app.use(cors({origin:["http://localhost:5173"]}));
+app.use(cookieParser())
 // application routes
 app.use('/api/v1/students', StudentRoutes);
 app.use('/api/v1/users', UserRoutes);
