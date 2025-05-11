@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import httpStatus from "http-status";
+import httpStatus from 'http-status';
 import mongoose from 'mongoose';
 import config from '../../config';
 import AppError from '../../error/AppError';
 import { AcademicDepartment } from '../academicDepartment/academicDepartment.model';
 import AcademicSemester from '../academicSemester/academicSemester.model';
-import { Admin } from "../admin/admin.model";
+import { Admin } from '../admin/admin.model';
 import { TFaculty } from '../faculty/faculty.interface';
 import { Faculty } from '../faculty/faculty.model';
 import { TStudent } from '../students/student.interface';
@@ -33,6 +33,7 @@ const createStudentIntoDB = async (password: string, studentData: TStudent) => {
   try {
     session.startTransaction();
     userData.role = 'student';
+    userData.email = studentData.email;
     userData.id = await generateId(admissionSemester);
     // create a user
 
@@ -50,14 +51,16 @@ const createStudentIntoDB = async (password: string, studentData: TStudent) => {
       throw new Error(' Fail create student by session');
     }
 
-    await session.commitTransaction()
-    await session.endSession()
+    await session.commitTransaction();
+    await session.endSession();
     return newStudent;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
-   session.abortTransaction()
-   session.endSession()
-   throw new Error(error.message?  error.message : " create error when start transaction")
+    session.abortTransaction();
+    session.endSession();
+    throw new Error(
+      error.message ? error.message : ' create error when start transaction',
+    );
   }
 };
 const createFacultyIntoDB = async (password: string, payload: TFaculty) => {
@@ -69,6 +72,7 @@ const createFacultyIntoDB = async (password: string, payload: TFaculty) => {
 
   //set student role
   userData.role = 'faculty';
+  userData.email = payload.email;
 
   // find academic department info
   const academicDepartment = await AcademicDepartment.findById(
@@ -109,15 +113,13 @@ const createFacultyIntoDB = async (password: string, payload: TFaculty) => {
     await session.endSession();
 
     return newFaculty;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
     await session.abortTransaction();
     await session.endSession();
     throw new Error(err);
   }
 };
-
-
 
 const createAdminIntoDB = async (password: string, payload: TFaculty) => {
   // create a user object
@@ -128,6 +130,7 @@ const createAdminIntoDB = async (password: string, payload: TFaculty) => {
 
   //set student role
   userData.role = 'admin';
+  userData.email = payload.email;
 
   const session = await mongoose.startSession();
 
@@ -137,7 +140,7 @@ const createAdminIntoDB = async (password: string, payload: TFaculty) => {
     userData.id = await generateAdminId();
 
     // create a user (transaction-1)
-    const newUser = await User.create([userData], { session }); 
+    const newUser = await User.create([userData], { session });
 
     //create a admin
     if (!newUser.length) {
@@ -167,5 +170,5 @@ const createAdminIntoDB = async (password: string, payload: TFaculty) => {
 export const UserServices = {
   createStudentIntoDB,
   createFacultyIntoDB,
-  createAdminIntoDB
+  createAdminIntoDB,
 };
