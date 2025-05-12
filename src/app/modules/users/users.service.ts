@@ -13,6 +13,8 @@ import { Student } from '../students/student.model';
 import { TUser } from './users.interface';
 import { User } from './users.model';
 import { generateAdminId, generateFacultyId, generateId } from './users.utils';
+import { verifyToken } from '../auth/auth.utils';
+import { USER_ROLE } from './user.constant';
 const createStudentIntoDB = async (password: string, studentData: TStudent) => {
   // create a user object
   const userData: Partial<TUser> = {};
@@ -167,8 +169,24 @@ const createAdminIntoDB = async (password: string, payload: TFaculty) => {
     throw new Error(err);
   }
 };
+const getMeService = async (token: string) => {
+  const decoded = verifyToken(token, config.jwt_access_secret as string);
+  const { userId, userRole } = decoded;
+  let result = null;
+  if (userRole === USER_ROLE.admin) {
+    result = await Admin.findOne({ id: userId });
+  }
+  if (userRole === USER_ROLE.faculty) {
+    result = await Faculty.findOne({ id: userId });
+  }
+  if (userRole === USER_ROLE.student) {
+    result = await Student.findOne({ id: userId });
+  }
+  return result;
+};
 export const UserServices = {
   createStudentIntoDB,
   createFacultyIntoDB,
   createAdminIntoDB,
+  getMeService,
 };

@@ -9,11 +9,12 @@ import { UserControllers } from './users.controller';
 
 const router = express.Router();
 
-
 router.post(
   '/create-student',
   auth(USER_ROLE.admin),
-  validateMiddleware(studentValidationSchemaByZod.createStudentValidationSchema),
+  validateMiddleware(
+    studentValidationSchemaByZod.createStudentValidationSchema,
+  ),
   UserControllers.createStudent,
 );
 router.post(
@@ -27,6 +28,11 @@ router.post(
   // auth(USER_ROLE.admin), come super admin
   validateMiddleware(createAdminValidationSchema),
   UserControllers.createAdmin,
+);
+router.get(
+  '/me',
+  auth(USER_ROLE.admin, USER_ROLE.faculty, USER_ROLE.student),
+  UserControllers.getMe,
 );
 
 export const UserRoutes = router;

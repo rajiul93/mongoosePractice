@@ -1,9 +1,11 @@
-import httpStatus from "http-status";
+import httpStatus from 'http-status';
 import { catchAsync } from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
 import { UserServices } from './users.service';
+import AppError from '../../error/AppError';
+
 const createStudent = catchAsync(async (req, res) => {
-  const { password, student: studentData } = req.body; 
+  const { password, student: studentData } = req.body;
   const result = await UserServices.createStudentIntoDB(password, studentData);
 
   sendResponse(res, {
@@ -13,7 +15,6 @@ const createStudent = catchAsync(async (req, res) => {
     data: result,
   });
 });
-
 
 const createFaculty = catchAsync(async (req, res) => {
   const { password, faculty: facultyData } = req.body;
@@ -28,10 +29,8 @@ const createFaculty = catchAsync(async (req, res) => {
   });
 });
 
-
 const createAdmin = catchAsync(async (req, res) => {
   const { password, admin: adminData } = req.body;
-
   const result = await UserServices.createAdminIntoDB(password, adminData);
 
   sendResponse(res, {
@@ -42,8 +41,26 @@ const createAdmin = catchAsync(async (req, res) => {
   });
 });
 
+const getMe = catchAsync(async (req, res) => {
+  const token = req.headers.authorization;
+
+  if (!token) {
+    throw new AppError(httpStatus.UNAUTHORIZED, 'access denied');
+  }
+
+  const result = await UserServices.getMeService(token);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Get user data successfully',
+    data: result,
+  });
+});
+
 export const UserControllers = {
   createStudent,
   createFaculty,
-  createAdmin
+  createAdmin,
+  getMe,
 };
